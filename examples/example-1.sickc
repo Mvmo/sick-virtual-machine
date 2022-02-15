@@ -1,0 +1,11 @@
+push 200
+push 201
+cmp
+cjmp 4 7
+push 1337
+dump
+jmp 9
+push 1889
+dump
+push 1000
+dump

@@ -1,15 +1,40 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"strings"
 
 	"mvmo.dev/sickvm/internal/pkg/interpreter"
 	"mvmo.dev/sickvm/internal/pkg/parser"
 )
 
+var (
+	inputFile *string
+)
+
+func init() {
+	inputFile = flag.String("file", "undefined", "file to be interpreted")
+}
+
 func main() {
+	flag.Parse()
+
+	if strings.ToLower(*inputFile) == "undefined" {
+		log.Fatalf("you need to provide a file to be interpreted")
+		return
+	}
+
+	content, err := ioutil.ReadFile(*inputFile)
+	if err != nil {
+		log.Fatalf("unable to read file: %v\n", err)
+		return
+	}
+
 	parser := parser.NewParser()
-	instructions, err := parser.Parse("push 200\npush 200\ncmp\ncjmp 4 7\npush 1337\ndump\njmp 9\npush 1889\ndump\npush 1000\ndump\npush 200\npush 200\njmp 14\n")
+	instructions, err := parser.Parse(string(content))
 	if err != nil {
 		fmt.Println(err)
 	}

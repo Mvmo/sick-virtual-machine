@@ -52,6 +52,16 @@ func (self Interpreter) Run() {
 			val2 := stack.Pop().(int)
 			stack.Push(val2 > val1)
 			break
+		case instructions.INS_LTE:
+			val1 := stack.Pop().(int)
+			val2 := stack.Pop().(int)
+			stack.Push(val2 <= val1)
+			break
+		case instructions.INS_GTE:
+			val1 := stack.Pop().(int)
+			val2 := stack.Pop().(int)
+			stack.Push(val2 >= val1)
+			break
 		case instructions.INS_JMP:
 			whereToJump := instruction.Params[0].(int)
 			i = whereToJump - 1

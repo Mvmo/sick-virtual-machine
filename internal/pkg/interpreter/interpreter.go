@@ -8,11 +8,13 @@ import (
 
 type Interpreter struct {
 	Instructions []instructions.Instruction
+	Labels       *map[string]int
 }
 
-func NewInterpreter(instructions []instructions.Instruction) Interpreter {
+func NewInterpreter(instructions []instructions.Instruction, Labels *map[string]int) Interpreter {
 	interpreter := new(Interpreter)
 	interpreter.Instructions = instructions
+	interpreter.Labels = Labels
 
 	return *interpreter
 }
@@ -80,6 +82,10 @@ func (self Interpreter) Run() {
 		case instructions.INS_DUP:
 			stack.Push(stack.Peek())
 			break
+		case instructions.INS_GOTO:
+			labelName := instruction.Params[0].(string)
+			i = (*self.Labels)[labelName] - 1
+			continue
 		case instructions.INS_DUMP:
 			fmt.Printf("=== Stack Dump ===\n")
 			for i := len(stack); i > 0; i-- {

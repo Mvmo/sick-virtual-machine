@@ -1,7 +1,7 @@
 push 0
 dup
 push 10
-gt
+lt
 cjmp 5 9
 push 1
 add

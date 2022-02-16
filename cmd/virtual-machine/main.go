@@ -39,11 +39,12 @@ func main() {
 	}
 
 	parser := parser.NewParser()
-	instructions, err := parser.Parse(string(content))
+	instructions, labels, err := parser.Parse(string(content))
 	if err != nil {
 		fmt.Println(err)
 	}
-	interpreter := interpreter.NewInterpreter(instructions)
+
+	interpreter := interpreter.NewInterpreter(instructions, labels)
 	interpreter.Run()
 
 	elapsed := time.Since(startTime)

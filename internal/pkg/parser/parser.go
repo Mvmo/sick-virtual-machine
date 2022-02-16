@@ -13,17 +13,25 @@ type Parser struct {
 	paramsParseFunctionsMap map[int][]interface{}
 }
 
-func (self Parser) Parse(input string) ([]instructions.Instruction, error) {
+func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]int, error) {
 	var returnValue []instructions.Instruction
+	var labels map[string]int = make(map[string]int)
 
 	lines := strings.Split(input, "\n")
-	for _, line := range lines {
+	for i, line := range lines {
 		if len(line) == 0 {
 			continue
 		}
 
 		fields := strings.Fields(line)
 		opname := fields[0]
+
+		if strings.HasSuffix(opname, ":") {
+			opname = strings.TrimSuffix(opname, ":")
+			labels[opname] = i
+			continue
+		}
+
 		params := fields[1:]
 
 		var opcode int
@@ -56,6 +64,9 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, error) {
 		case "dup":
 			opcode = instructions.INS_DUP
 			break
+		case "goto":
+			opcode = instructions.INS_GOTO
+			break
 		default:
 			fmt.Printf("No instruction parsing for %v\n", opname)
 			syscall.Exit(-1)
@@ -64,13 +75,20 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, error) {
 		parseFunctions := self.paramsParseFunctionsMap[opcode]
 
 		if len(params) != len(parseFunctions) {
-			return nil, fmt.Errorf("Required %v parameters for %v instruction and got %v", len(parseFunctions), opname, len(params))
+			return nil, nil, fmt.Errorf("Required %v parameters for %v instruction and got %v", len(parseFunctions), opname, len(params))
 		}
 
 		var parsedParams = make([]interface{}, len(parseFunctions))
 		for i, parseParam := range parseFunctions {
 			unparsedParam := params[i]
-			parsedParams[i] = parseParam.(func(string) int)(unparsedParam)
+			switch parseParam.(type) {
+			case func(string) int:
+				parsedParams[i] = parseParam.(func(string) int)(unparsedParam)
+				break
+			case func(string) string:
+				parsedParams[i] = parseParam.(func(string) string)(unparsedParam)
+				break
+			}
 		}
 
 		instruction := new(instructions.Instruction)
@@ -80,7 +98,7 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, error) {
 		returnValue = append(returnValue, *instruction)
 	}
 
-	return returnValue, nil
+	return returnValue, &labels, nil
 }
 
 func NewParser() *Parser {
@@ -103,7 +121,10 @@ func NewParser() *Parser {
 			parseIntParam,
 			parseIntParam,
 		},
-		instructions.INS_DUP:  {},
+		instructions.INS_DUP: {},
+		instructions.INS_GOTO: {
+			parseStringParam,
+		},
 		instructions.INS_DUMP: {},
 	}
 
@@ -117,4 +138,12 @@ func parseIntParam(str string) int {
 	}
 
 	return val
+}
+
+func parseStringParam(str string) string {
+	if len(str) == 0 || str == " " {
+		syscall.Exit(-1)
+	}
+
+	return str
 }

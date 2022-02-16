@@ -17,5 +17,6 @@ const (
 	INS_JMP
 	INS_CJMP
 	INS_DUP
+	INS_GOTO
 	INS_DUMP
 )

@@ -1,0 +1,8 @@
+goto my_label
+push 200
+dump
+my_label:
+push 101
+dump 
+push 100
+dump

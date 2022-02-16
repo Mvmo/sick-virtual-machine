@@ -58,6 +58,15 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 		case "sub":
 			opcode = instructions.INS_SUB
 			break
+		case "mul":
+			opcode = instructions.INS_MUL
+			break
+		case "div":
+			opcode = instructions.INS_DIV
+			break
+		case "mod":
+			opcode = instructions.INS_MOD
+			break
 		case "cmp":
 			opcode = instructions.INS_CMP
 			break
@@ -122,6 +131,9 @@ func NewParser() *Parser {
 		},
 		instructions.INS_ADD: {},
 		instructions.INS_SUB: {},
+		instructions.INS_MUL: {},
+		instructions.INS_DIV: {},
+		instructions.INS_MOD: {},
 		instructions.INS_CMP: {},
 		instructions.INS_LT:  {},
 		instructions.INS_GT:  {},

@@ -39,6 +39,21 @@ func (self Interpreter) Run() {
 			val2 := stack.Pop().(int)
 			stack.Push(val2 - val1)
 			break
+		case instructions.INS_MUL:
+			val1 := stack.Pop().(int)
+			val2 := stack.Pop().(int)
+			stack.Push(val2 * val1)
+			break
+		case instructions.INS_DIV:
+			val1 := stack.Pop().(int)
+			val2 := stack.Pop().(int)
+			stack.Push(val2 / val1)
+			break
+		case instructions.INS_MOD:
+			val1 := stack.Pop().(int)
+			val2 := stack.Pop().(int)
+			stack.Push(val2 % val1)
+			break
 		case instructions.INS_CMP:
 			val1 := stack.Pop()
 			val2 := stack.Pop()

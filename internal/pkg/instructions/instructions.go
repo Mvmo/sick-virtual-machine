@@ -9,6 +9,9 @@ const (
 	INS_PUSH = iota
 	INS_ADD
 	INS_SUB
+	INS_MUL
+	INS_DIV
+	INS_MOD
 	INS_CMP
 	INS_LT
 	INS_GT

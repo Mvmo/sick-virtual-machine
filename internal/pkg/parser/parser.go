@@ -26,6 +26,10 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 		fields := strings.Fields(line)
 		opname := fields[0]
 
+		if strings.HasPrefix(opname, ";") {
+			continue
+		}
+
 		if strings.HasSuffix(opname, ":") {
 			opname = strings.TrimSuffix(opname, ":")
 			labels[opname] = i

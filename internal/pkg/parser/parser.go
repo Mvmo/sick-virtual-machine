@@ -40,6 +40,10 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, error) {
 		case "cmp":
 			opcode = instructions.INS_CMP
 			break
+		case "lt":
+			opcode = instructions.INS_LT
+		case "gt":
+			opcode = instructions.INS_GT
 		case "dump":
 			opcode = instructions.INS_DUMP
 			break
@@ -48,6 +52,9 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, error) {
 			break
 		case "cjmp":
 			opcode = instructions.INS_CJMP
+			break
+		case "dup":
+			opcode = instructions.INS_DUP
 			break
 		default:
 			fmt.Printf("No instruction parsing for %v\n", opname)
@@ -85,6 +92,8 @@ func NewParser() *Parser {
 		instructions.INS_ADD: {},
 		instructions.INS_SUB: {},
 		instructions.INS_CMP: {},
+		instructions.INS_LT:  {},
+		instructions.INS_GT:  {},
 		instructions.INS_JMP: {
 			parseIntParam,
 		},
@@ -92,6 +101,7 @@ func NewParser() *Parser {
 			parseIntParam,
 			parseIntParam,
 		},
+		instructions.INS_DUP:  {},
 		instructions.INS_DUMP: {},
 	}
 

@@ -17,7 +17,16 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 	var returnValue []instructions.Instruction
 	var labels map[string]int = make(map[string]int)
 
-	lines := strings.Split(input, "\n")
+	rawLines := strings.Split(input, "\n")
+
+	var lines []string
+	for _, line := range rawLines {
+		if strings.HasPrefix(line, ";") {
+			continue
+		}
+		lines = append(lines, line)
+	}
+
 	for i, line := range lines {
 		if len(line) == 0 {
 			continue

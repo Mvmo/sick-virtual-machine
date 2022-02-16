@@ -1,6 +1,7 @@
 goto my_label
 push 200
 dump
+; my_comment
 my_label:
 push 101
 dump 

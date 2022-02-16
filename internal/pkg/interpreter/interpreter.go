@@ -35,7 +35,7 @@ func (self Interpreter) Run() {
 		case instructions.INS_SUB:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
-			stack.Push(val1 - val2)
+			stack.Push(val2 - val1)
 			break
 		case instructions.INS_CMP:
 			val1 := stack.Pop()
@@ -68,17 +68,14 @@ func (self Interpreter) Run() {
 			i = whereToJump
 			continue
 		case instructions.INS_DUP:
-			val1 := stack.Pop()
-			val2 := stack.Pop()
-
-			for i := 0; i < 2; i++ {
-				stack.Push(val1)
-				stack.Push(val2)
-			}
+			stack.Push(stack.Peek())
+			break
 		case instructions.INS_DUMP:
-			for i, v := range stack {
-				fmt.Printf("%v: %v\n", i, v)
+			fmt.Printf("=== Stack Dump ===\n")
+			for i := len(stack); i > 0; i-- {
+				fmt.Printf("%v: %v\n", i, stack[i-1])
 			}
+			fmt.Printf("==================\n")
 			break
 		default:
 			fmt.Printf("Interpreter: No handling for instruction: %v\n", instruction.OpCode)

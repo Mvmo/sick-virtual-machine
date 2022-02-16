@@ -45,12 +45,12 @@ func (self Interpreter) Run() {
 		case instructions.INS_LT:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
-			stack.Push(val1 < val2)
+			stack.Push(val2 < val1)
 			break
 		case instructions.INS_GT:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
-			stack.Push(val1 > val2)
+			stack.Push(val2 > val1)
 			break
 		case instructions.INS_JMP:
 			whereToJump := instruction.Params[0].(int)

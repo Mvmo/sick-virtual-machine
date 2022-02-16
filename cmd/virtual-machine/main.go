@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"time"
 
 	"mvmo.dev/sickvm/internal/pkg/interpreter"
 	"mvmo.dev/sickvm/internal/pkg/parser"
@@ -13,10 +14,12 @@ import (
 
 var (
 	inputFile *string
+	timing    *bool
 )
 
 func init() {
 	inputFile = flag.String("file", "undefined", "file to be interpreted")
+	timing = flag.Bool("timing", false, "enable timing for compiler")
 }
 
 func main() {
@@ -26,6 +29,8 @@ func main() {
 		log.Fatalf("you need to provide a file to be interpreted")
 		return
 	}
+
+	startTime := time.Now()
 
 	content, err := ioutil.ReadFile(*inputFile)
 	if err != nil {
@@ -40,4 +45,10 @@ func main() {
 	}
 	interpreter := interpreter.NewInterpreter(instructions)
 	interpreter.Run()
+
+	elapsed := time.Since(startTime)
+
+	if *timing {
+		log.Printf("took: %v", elapsed)
+	}
 }

@@ -76,8 +76,9 @@ func (self Interpreter) Run() {
 				stack.Push(val2)
 			}
 		case instructions.INS_DUMP:
-			head := stack.Peek()
-			fmt.Printf("%v\n", head)
+			for i, v := range stack {
+				fmt.Printf("%v: %v\n", i, v)
+			}
 			break
 		default:
 			fmt.Printf("Interpreter: No handling for instruction: %v\n", instruction.OpCode)

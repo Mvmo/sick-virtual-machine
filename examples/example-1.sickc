@@ -1,11 +1,9 @@
-push 200
-push 201
-cmp
-cjmp 4 7
-push 1337
+push 0
+dup
+push 10
+gt
+cjmp 5 9
+push 1
+add
 dump
-jmp 9
-push 1889
-dump
-push 1000
-dump
+jmp 1

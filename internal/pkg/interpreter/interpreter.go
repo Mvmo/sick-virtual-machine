@@ -42,6 +42,16 @@ func (self Interpreter) Run() {
 			val2 := stack.Pop()
 			stack.Push(val1 == val2)
 			break
+		case instructions.INS_LT:
+			val1 := stack.Pop().(int)
+			val2 := stack.Pop().(int)
+			stack.Push(val1 < val2)
+			break
+		case instructions.INS_GT:
+			val1 := stack.Pop().(int)
+			val2 := stack.Pop().(int)
+			stack.Push(val1 > val2)
+			break
 		case instructions.INS_JMP:
 			whereToJump := instruction.Params[0].(int)
 			i = whereToJump - 1
@@ -57,6 +67,14 @@ func (self Interpreter) Run() {
 
 			i = whereToJump
 			continue
+		case instructions.INS_DUP:
+			val1 := stack.Pop()
+			val2 := stack.Pop()
+
+			for i := 0; i < 2; i++ {
+				stack.Push(val1)
+				stack.Push(val2)
+			}
 		case instructions.INS_DUMP:
 			head := stack.Peek()
 			fmt.Printf("%v\n", head)

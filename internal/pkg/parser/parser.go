@@ -154,6 +154,15 @@ func NewParser() *Parser {
 		instructions.INS_GT:  {},
 		instructions.INS_LTE: {},
 		instructions.INS_GTE: {},
+		instructions.INS_STORE: {
+			parseStringParam,
+		},
+		instructions.INS_LOAD: {
+			parseStringParam,
+		},
+		instructions.INS_DEL: {
+			parseStringParam,
+		},
 		instructions.INS_JMP: {
 			parseIntParam,
 		},

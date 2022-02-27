@@ -22,4 +22,5 @@ const (
 	INS_DUP
 	INS_GOTO
 	INS_DUMP
+	INS_VOID
 )

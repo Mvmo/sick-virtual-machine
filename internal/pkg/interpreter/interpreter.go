@@ -28,57 +28,57 @@ func (self Interpreter) Run() {
 		switch instruction.OpCode {
 		case instructions.INS_PUSH:
 			stack.Push(instruction.Params[0])
-			break
+			continue
 		case instructions.INS_ADD:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val1 + val2)
-			break
+			continue
 		case instructions.INS_SUB:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 - val1)
-			break
+			continue
 		case instructions.INS_MUL:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 * val1)
-			break
+			continue
 		case instructions.INS_DIV:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 / val1)
-			break
+			continue
 		case instructions.INS_MOD:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 % val1)
-			break
+			continue
 		case instructions.INS_CMP:
 			val1 := stack.Pop()
 			val2 := stack.Pop()
 			stack.Push(val1 == val2)
-			break
+			continue
 		case instructions.INS_LT:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 < val1)
-			break
+			continue
 		case instructions.INS_GT:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 > val1)
-			break
+			continue
 		case instructions.INS_LTE:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 <= val1)
-			break
+			continue
 		case instructions.INS_GTE:
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 >= val1)
-			break
+			continue
 		case instructions.INS_JMP:
 			whereToJump := instruction.Params[0].(int)
 			i = whereToJump - 1
@@ -95,8 +95,10 @@ func (self Interpreter) Run() {
 			i = whereToJump
 			continue
 		case instructions.INS_DUP:
-			stack.Push(stack.Peek())
-			break
+			head := stack.Pop()
+			stack.Push(head)
+			stack.Push(head)
+			continue
 		case instructions.INS_GOTO:
 			labelName := instruction.Params[0].(string)
 			i = (*self.Labels)[labelName] - 1
@@ -104,13 +106,19 @@ func (self Interpreter) Run() {
 		case instructions.INS_DUMP:
 			fmt.Printf("=== Stack Dump ===\n")
 			for i := len(stack); i > 0; i-- {
-				fmt.Printf("%v: %v\n", i, stack[i-1])
+				var anno string
+				if len(stack) == i {
+					anno = "   <-- head"
+				}
+				fmt.Printf("%v: %v%v\n", i, stack[i-1], anno)
 			}
 			fmt.Printf("==================\n")
-			break
+			continue
+		case instructions.INS_VOID:
+			continue
 		default:
 			fmt.Printf("Interpreter: No handling for instruction: %v\n", instruction.OpCode)
-			break
+			continue
 		}
 	}
 }

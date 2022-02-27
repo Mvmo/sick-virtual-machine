@@ -21,6 +21,7 @@ func NewInterpreter(instructions []instructions.Instruction, Labels *map[string]
 
 func (self Interpreter) Run() {
 	var stack Stack
+	var storage map[string]interface{}
 
 	for i := 0; i < len(self.Instructions); i++ {
 		instruction := self.Instructions[i]
@@ -78,6 +79,15 @@ func (self Interpreter) Run() {
 			val1 := stack.Pop().(int)
 			val2 := stack.Pop().(int)
 			stack.Push(val2 >= val1)
+			continue
+		case instructions.INS_STORE:
+			identifier := instruction.Params[0].(string)
+			toStore := stack.Pop()
+			storage[identifier] = toStore
+			continue
+		case instructions.INS_DEL:
+			identifier := instruction.Params[0].(string)
+			delete(storage, identifier)
 			continue
 		case instructions.INS_JMP:
 			whereToJump := instruction.Params[0].(int)

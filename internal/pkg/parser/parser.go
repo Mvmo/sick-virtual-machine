@@ -85,6 +85,10 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 			opcode = instructions.INS_GT
 		case "gte":
 			opcode = instructions.INS_GTE
+		case "store":
+			opcode = instructions.INS_STORE
+		case "del":
+			opcode = instructions.INS_DEL
 		case "dump":
 			opcode = instructions.INS_DUMP
 			break

@@ -79,16 +79,25 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 			break
 		case "lt":
 			opcode = instructions.INS_LT
+			break
 		case "lte":
 			opcode = instructions.INS_LTE
+			break
 		case "gt":
 			opcode = instructions.INS_GT
+			break
 		case "gte":
 			opcode = instructions.INS_GTE
+			break
 		case "store":
 			opcode = instructions.INS_STORE
+			break
+		case "load":
+			opcode = instructions.INS_LOAD
+			break
 		case "del":
 			opcode = instructions.INS_DEL
+			break
 		case "dump":
 			opcode = instructions.INS_DUMP
 			break
@@ -105,14 +114,14 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 			opcode = instructions.INS_GOTO
 			break
 		default:
-			fmt.Printf("No instruction parsing for %v\n", opname)
+			fmt.Printf("Parser: No instruction parsing for %v\n", opname)
 			syscall.Exit(-1)
 		}
 
 		parseFunctions := self.paramsParseFunctionsMap[opcode]
 
 		if len(params) != len(parseFunctions) {
-			return nil, nil, fmt.Errorf("Required %v parameters for %v instruction and got %v", len(parseFunctions), opname, len(params))
+			return nil, nil, fmt.Errorf("Parser: Required %v parameters for %v instruction and got %v", len(parseFunctions), opname, len(params))
 		}
 
 		var parsedParams = make([]interface{}, len(parseFunctions))

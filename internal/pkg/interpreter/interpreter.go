@@ -85,6 +85,11 @@ func (self Interpreter) Run() {
 			toStore := stack.Pop()
 			storage[identifier] = toStore
 			continue
+		case instructions.INS_LOAD:
+			identifier := instruction.Params[0].(string)
+			toPush := storage[identifier]
+			stack.Push(toPush)
+			continue
 		case instructions.INS_DEL:
 			identifier := instruction.Params[0].(string)
 			delete(storage, identifier)

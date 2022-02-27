@@ -42,6 +42,13 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 		if strings.HasSuffix(opname, ":") {
 			opname = strings.TrimSuffix(opname, ":")
 			labels[opname] = i
+
+			instruction := new(instructions.Instruction)
+			instruction.OpCode = instructions.INS_VOID
+			instruction.Params = nil
+
+			returnValue = append(returnValue, *instruction)
+
 			continue
 		}
 
@@ -72,8 +79,12 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 			break
 		case "lt":
 			opcode = instructions.INS_LT
+		case "lte":
+			opcode = instructions.INS_LTE
 		case "gt":
 			opcode = instructions.INS_GT
+		case "gte":
+			opcode = instructions.INS_GTE
 		case "dump":
 			opcode = instructions.INS_DUMP
 			break

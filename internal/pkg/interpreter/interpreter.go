@@ -21,7 +21,7 @@ func NewInterpreter(instructions []instructions.Instruction, Labels *map[string]
 
 func (self Interpreter) Run() {
 	var stack Stack
-	var storage map[string]interface{}
+	var storage map[string]interface{} = make(map[string]interface{})
 
 	for i := 0; i < len(self.Instructions); i++ {
 		instruction := self.Instructions[i]

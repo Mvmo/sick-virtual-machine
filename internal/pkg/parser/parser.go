@@ -13,7 +13,7 @@ type Parser struct {
 	paramsParseFunctionsMap map[int][]interface{}
 }
 
-func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]int, error) {
+func (parser Parser) Parse(input string) ([]instructions.Instruction, *map[string]int, error) {
 	var returnValue []instructions.Instruction
 	var labels map[string]int = make(map[string]int)
 
@@ -51,8 +51,6 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 
 			continue
 		}
-
-		params := fields[1:]
 
 		var opcode int
 		switch opname {
@@ -107,7 +105,27 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 			syscall.Exit(-1)
 		}
 
-		parseFunctions := self.paramsParseFunctionsMap[opcode]
+		parseFunctions := parser.paramsParseFunctionsMap[opcode]
+
+		var params []string = make([]string, 0)
+		fieldsSlice := fields[1:]
+		for j := 0; j < len(fieldsSlice); j++ {
+			param := fieldsSlice[j]
+			if !strings.HasPrefix(param, "\"") {
+				params = append(params, param)
+				continue
+			}
+
+			for k := j + 1; k < len(fieldsSlice); k++ {
+				nextParam := fieldsSlice[k]
+				param += " " + nextParam
+				if strings.HasSuffix(nextParam, "\"") {
+					params = append(params, param)
+					j = k
+					break
+				}
+			}
+		}
 
 		if len(params) != len(parseFunctions) {
 			return nil, nil, fmt.Errorf("Parser: Required %v parameters for %v instruction and got %v", len(parseFunctions), opname, len(params))
@@ -116,13 +134,13 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 		var parsedParams = make([]interface{}, len(parseFunctions))
 		for i, parseParam := range parseFunctions {
 			unparsedParam := params[i]
-			switch parseParam.(type) {
+			switch parseParam := parseParam.(type) {
 			case func(string) int:
-				parsedParams[i] = parseParam.(func(string) int)(unparsedParam)
-				break
+				parsedParams[i] = parseParam(unparsedParam)
 			case func(string) string:
-				parsedParams[i] = parseParam.(func(string) string)(unparsedParam)
-				break
+				parsedParams[i] = parseParam(unparsedParam)
+			case func(string) bool:
+				parsedParams[i] = parseParam(unparsedParam)
 			}
 		}
 
@@ -159,13 +177,13 @@ func NewParser() *Parser {
 		instructions.INS_LTE: {},
 		instructions.INS_GTE: {},
 		instructions.INS_STORE: {
-			parseStringParam,
+			parseIdentifierParam,
 		},
 		instructions.INS_LOAD: {
-			parseStringParam,
+			parseIdentifierParam,
 		},
 		instructions.INS_DEL: {
-			parseStringParam,
+			parseIdentifierParam,
 		},
 		instructions.INS_JMP: {
 			parseIntParam,
@@ -176,7 +194,7 @@ func NewParser() *Parser {
 		},
 		instructions.INS_DUP: {},
 		instructions.INS_GOTO: {
-			parseStringParam,
+			parseIdentifierParam,
 		},
 		instructions.INS_DUMP: {},
 	}
@@ -194,6 +212,18 @@ func parseIntParam(str string) int {
 }
 
 func parseStringParam(str string) string {
+	if !strings.HasPrefix(str, "\"") {
+		syscall.Exit(-1)
+	}
+
+	if len(str) == 0 || str == " " {
+		syscall.Exit(-1)
+	}
+
+	return strings.TrimSuffix(strings.TrimPrefix(str, "\""), "\"")
+}
+
+func parseIdentifierParam(str string) string {
 	if len(str) == 0 || str == " " {
 		syscall.Exit(-1)
 	}

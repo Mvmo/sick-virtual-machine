@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"mvmo.dev/sickvm/internal/pkg/instructions"
+	"mvmo.dev/sickvm/internal/pkg/types"
 )
 
 type Interpreter struct {
@@ -21,39 +22,41 @@ func NewInterpreter(instructions []instructions.Instruction, Labels *map[string]
 
 func (self Interpreter) Run() {
 	var stack Stack
-	var storage map[string]interface{} = make(map[string]interface{})
+	var storage map[string]types.SickType = make(map[string]types.SickType)
 
 	for i := 0; i < len(self.Instructions); i++ {
 		instruction := self.Instructions[i]
 
 		switch instruction.OpCode {
-		case instructions.INS_PUSH:
-			stack.Push(instruction.Params[0])
+		case instructions.INS_IPUSH:
+		case instructions.INS_SPUSH:
+		case instructions.INS_BPUSH:
+			stack.Push(types.AnyToSickType(instruction.Params[0]))
 			continue
 		case instructions.INS_ADD:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val1 + val2)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val1.AsInt() + val2.AsInt())
 			continue
 		case instructions.INS_SUB:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val2 - val1)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val2.AsInt() - val1.AsInt())
 			continue
 		case instructions.INS_MUL:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val2 * val1)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val2.AsInt() * val1.AsInt())
 			continue
 		case instructions.INS_DIV:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val2 / val1)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val2.AsInt() / val1.AsInt())
 			continue
 		case instructions.INS_MOD:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val2 % val1)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val2.AsInt() % val1.AsInt())
 			continue
 		case instructions.INS_CMP:
 			val1 := stack.Pop()
@@ -61,24 +64,24 @@ func (self Interpreter) Run() {
 			stack.Push(val1 == val2)
 			continue
 		case instructions.INS_LT:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val2 < val1)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val2.AsFloat() < val1.AsFloat())
 			continue
 		case instructions.INS_GT:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val2 > val1)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val2.AsFloat() > val1.AsFloat())
 			continue
 		case instructions.INS_LTE:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val2 <= val1)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val2.AsFloat() <= val1.AsFloat())
 			continue
 		case instructions.INS_GTE:
-			val1 := stack.Pop().(int)
-			val2 := stack.Pop().(int)
-			stack.Push(val2 >= val1)
+			val1 := stack.Pop().(types.SickNum)
+			val2 := stack.Pop().(types.SickNum)
+			stack.Push(val2.AsFloat() >= val1.AsFloat())
 			continue
 		case instructions.INS_STORE:
 			identifier := instruction.Params[0].(string)
@@ -99,9 +102,9 @@ func (self Interpreter) Run() {
 			i = whereToJump - 1
 			continue
 		case instructions.INS_CJMP: // first param is where to jump if true and second where to jump if false
-			condition := stack.Pop().(bool)
+			condition := stack.Pop().(types.SickBool)
 			var whereToJump int
-			if condition {
+			if condition.Value {
 				whereToJump = instruction.Params[0].(int) - 1
 			} else {
 				whereToJump = instruction.Params[1].(int) - 1

@@ -150,8 +150,14 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 func NewParser() *Parser {
 	parser := new(Parser)
 	parser.paramsParseFunctionsMap = map[int][]interface{}{
-		instructions.INS_PUSH: {
+		instructions.INS_IPUSH: {
 			parseIntParam,
+		},
+		instructions.INS_SPUSH: {
+			parseStringParam,
+		},
+		instructions.INS_BPUSH: {
+			parseBoolParam,
 		},
 		instructions.INS_ADD: {},
 		instructions.INS_SUB: {},
@@ -204,4 +210,13 @@ func parseStringParam(str string) string {
 	}
 
 	return str
+}
+
+func parseBoolParam(str string) bool {
+	val, err := strconv.ParseBool(str)
+	if err != nil {
+		syscall.Exit(-1)
+	}
+
+	return val
 }

@@ -1,6 +1,8 @@
 package interpreter
 
-type Stack []interface{}
+import "mvmo.dev/sickvm/internal/pkg/types"
+
+type Stack []types.SickType
 
 func (s *Stack) IsEmpty() bool {
 	return len(*s) == 0
@@ -8,11 +10,11 @@ func (s *Stack) IsEmpty() bool {
 
 // Push a new value onto the stack
 func (s *Stack) Push(element interface{}) {
-	*s = append(*s, element) // Simply append the new value to the end of the stack
+	*s = append(*s, types.AnyToSickType(element)) // Simply append the new value to the end of the stack
 }
 
 // Remove and return top element of stack. Return false if stack is empty.
-func (s *Stack) Pop() interface{} {
+func (s *Stack) Pop() types.SickType {
 	if s.IsEmpty() {
 		return nil
 	}
@@ -23,7 +25,7 @@ func (s *Stack) Pop() interface{} {
 	return element
 }
 
-func (s *Stack) Peek() interface{} {
+func (s *Stack) Peek() types.SickType {
 	if s.IsEmpty() {
 		return nil
 	}

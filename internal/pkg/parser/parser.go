@@ -56,63 +56,52 @@ func (self Parser) Parse(input string) ([]instructions.Instruction, *map[string]
 
 		var opcode int
 		switch opname {
-		case "push":
-			opcode = instructions.INS_PUSH
-			break
+		case "ipush":
+			opcode = instructions.INS_IPUSH
+		case "bpush":
+			opcode = instructions.INS_BPUSH
+		case "spush":
+			opcode = instructions.INS_SPUSH
 		case "add":
 			opcode = instructions.INS_ADD
-			break
 		case "sub":
 			opcode = instructions.INS_SUB
-			break
 		case "mul":
 			opcode = instructions.INS_MUL
-			break
 		case "div":
 			opcode = instructions.INS_DIV
-			break
 		case "mod":
 			opcode = instructions.INS_MOD
-			break
 		case "cmp":
 			opcode = instructions.INS_CMP
-			break
 		case "lt":
 			opcode = instructions.INS_LT
-			break
 		case "lte":
 			opcode = instructions.INS_LTE
-			break
 		case "gt":
 			opcode = instructions.INS_GT
-			break
 		case "gte":
 			opcode = instructions.INS_GTE
-			break
 		case "store":
 			opcode = instructions.INS_STORE
-			break
 		case "load":
 			opcode = instructions.INS_LOAD
-			break
 		case "del":
 			opcode = instructions.INS_DEL
-			break
 		case "dump":
 			opcode = instructions.INS_DUMP
-			break
 		case "jmp":
 			opcode = instructions.INS_JMP
-			break
 		case "cjmp":
 			opcode = instructions.INS_CJMP
-			break
 		case "dup":
 			opcode = instructions.INS_DUP
-			break
+		case "print":
+			opcode = instructions.INS_PRINT
+		case "println":
+			opcode = instructions.INS_PRINTLN
 		case "goto":
 			opcode = instructions.INS_GOTO
-			break
 		default:
 			fmt.Printf("Parser: No instruction parsing for %v\n", opname)
 			syscall.Exit(-1)

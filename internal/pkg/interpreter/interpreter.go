@@ -20,12 +20,12 @@ func NewInterpreter(instructions []instructions.Instruction, Labels *map[string]
 	return *interpreter
 }
 
-func (self Interpreter) Run() {
+func (interpreter Interpreter) Run() {
 	var stack Stack
 	var storage map[string]types.SickType = make(map[string]types.SickType)
 
-	for i := 0; i < len(self.Instructions); i++ {
-		instruction := self.Instructions[i]
+	for i := 0; i < len(interpreter.Instructions); i++ {
+		instruction := interpreter.Instructions[i]
 
 		switch instruction.OpCode {
 		case instructions.INS_IPUSH:
@@ -117,9 +117,17 @@ func (self Interpreter) Run() {
 			stack.Push(head)
 			stack.Push(head)
 			continue
+		case instructions.INS_PRINT:
+			head := stack.Pop()
+			fmt.Print(head.ToHuman())
+			continue
+		case instructions.INS_PRINTLN:
+			head := stack.Pop()
+			fmt.Println(head.ToHuman())
+			continue
 		case instructions.INS_GOTO:
 			labelName := instruction.Params[0].(string)
-			i = (*self.Labels)[labelName] - 1
+			i = (*interpreter.Labels)[labelName] - 1
 			continue
 		case instructions.INS_DUMP:
 			fmt.Printf("=== Stack Dump ===\n")

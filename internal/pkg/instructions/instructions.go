@@ -6,7 +6,9 @@ type Instruction struct {
 }
 
 const (
-	INS_PUSH = iota
+	INS_IPUSH = iota // int push
+	INS_SPUSH        // string push
+	INS_BPUSH        // bool push
 	INS_ADD
 	INS_SUB
 	INS_MUL

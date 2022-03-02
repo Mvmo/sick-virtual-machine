@@ -1,19 +1,25 @@
 package types
 
 import (
+	"log"
+	"reflect"
+	"strconv"
 	"syscall"
 )
 
 func AnyToSickType(any interface{}) SickType {
-	switch any.(type) {
+	switch any := any.(type) {
+	case SickType:
+		return any
 	case string:
-		return SickString{any.(string)}
+		return SickString{any}
 	case int:
-		return SickInt{any.(int)}
+		return SickInt{any}
 	case bool:
-		return SickBool{any.(bool)}
+		return SickBool{any}
 	default:
-		syscall.Exit(-1)
+		log.Fatalf("Types: No parsing for type %v", reflect.TypeOf(any))
+		syscall.Exit(0)
 		return nil
 	}
 }
@@ -31,30 +37,30 @@ type SickString struct {
 	Value string
 }
 
-func (self SickString) ToHuman() string {
-	return "string"
+func (sickString SickString) ToHuman() string {
+	return sickString.Value
 }
 
 type SickInt struct {
 	Value int
 }
 
-func (self SickInt) ToHuman() string {
-	return "int"
+func (sickInt SickInt) ToHuman() string {
+	return strconv.Itoa(sickInt.Value)
 }
 
-func (self SickInt) AsInt() int {
-	return self.Value
+func (sickInt SickInt) AsInt() int {
+	return sickInt.Value
 }
 
-func (self SickInt) AsFloat() float64 {
-	return float64(self.Value)
+func (sickInt SickInt) AsFloat() float64 {
+	return float64(sickInt.Value)
 }
 
 type SickBool struct {
 	Value bool
 }
 
-func (self SickBool) ToHuman() string {
-	return "bool"
+func (sickBool SickBool) ToHuman() string {
+	return strconv.FormatBool(sickBool.Value)
 }

@@ -29,7 +29,11 @@ func (interpreter Interpreter) Run() {
 
 		switch instruction.OpCode {
 		case instructions.INS_IPUSH:
+			stack.Push(types.AnyToSickType(instruction.Params[0]))
+			continue
 		case instructions.INS_SPUSH:
+			stack.Push(types.AnyToSickType(instruction.Params[0]))
+			continue
 		case instructions.INS_BPUSH:
 			stack.Push(types.AnyToSickType(instruction.Params[0]))
 			continue
@@ -136,7 +140,7 @@ func (interpreter Interpreter) Run() {
 				if len(stack) == i {
 					anno = "   <-- head"
 				}
-				fmt.Printf("%v: %v%v\n", i, stack[i-1], anno)
+				fmt.Printf("%v: %v%v\n", i, stack[i-1].ToHuman(), anno)
 			}
 			fmt.Printf("==================\n")
 			continue

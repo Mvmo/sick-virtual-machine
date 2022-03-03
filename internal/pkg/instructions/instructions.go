@@ -6,28 +6,28 @@ type Instruction struct {
 }
 
 const (
-	INS_IPUSH = iota // int push
-	INS_SPUSH        // string push
-	INS_BPUSH        // bool push
-	INS_ADD
-	INS_SUB
-	INS_MUL
-	INS_DIV
-	INS_MOD
-	INS_CMP
-	INS_LT
-	INS_GT
-	INS_LTE
-	INS_GTE
-	INS_STORE
-	INS_LOAD
-	INS_DEL
-	INS_JMP
-	INS_CJMP
-	INS_DUP
-	INS_PRINT
-	INS_PRINTLN
-	INS_GOTO
-	INS_DUMP
-	INS_VOID
+	INS_IPUSH   = iota // int push
+	INS_SPUSH          // string push
+	INS_BPUSH          // bool push
+	INS_ADD            // add
+	INS_SUB            // substract
+	INS_MUL            // multiply
+	INS_DIV            // division
+	INS_MOD            // modulo
+	INS_CMP            // compare
+	INS_LT             // less than
+	INS_GT             // greater than
+	INS_LTE            // less than or equals
+	INS_GTE            // greater than or equals
+	INS_STORE          // stores identifier associated with head of stack
+	INS_LOAD           // loads value from storage by identifier
+	INS_DEL            // deletes value from storage by identififer
+	INS_JMP            // jumps to instruction by instruction count
+	INS_CJMP           // conditional jump
+	INS_DUP            // duplicates head
+	INS_PRINT          // prints head of stack
+	INS_PRINTLN        // prints head of stack with newline
+	INS_GOTO           // goto specified label
+	INS_DUMP           // print whole stack
+	INS_VOID           // do nothing
 )

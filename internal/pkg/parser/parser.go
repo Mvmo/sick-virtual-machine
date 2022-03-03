@@ -111,7 +111,7 @@ func (parser Parser) Parse(input string) ([]instructions.Instruction, *map[strin
 		fieldsSlice := fields[1:]
 		for j := 0; j < len(fieldsSlice); j++ {
 			param := fieldsSlice[j]
-			if !strings.HasPrefix(param, "\"") {
+			if !strings.HasPrefix(param, "\"") || strings.HasSuffix(param, "\"") {
 				params = append(params, param)
 				continue
 			}

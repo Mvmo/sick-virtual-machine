@@ -45,7 +45,10 @@ func main() {
 	}
 
 	interpreter := interpreter.NewInterpreter(instructions, labels)
-	interpreter.Run()
+	err = interpreter.Run()
+	if err != nil {
+		log.Print(err)
+	}
 
 	elapsed := time.Since(startTime)
 

@@ -20,7 +20,7 @@ func NewInterpreter(instructions []instructions.Instruction, Labels *map[string]
 	return *interpreter
 }
 
-func (interpreter Interpreter) Run() {
+func (interpreter Interpreter) Run() error {
 	var stack Stack
 	var storage map[string]types.SickType = make(map[string]types.SickType)
 
@@ -38,9 +38,19 @@ func (interpreter Interpreter) Run() {
 			stack.Push(types.AnyToSickType(instruction.Params[0]))
 			continue
 		case instructions.INS_ADD:
-			val1 := stack.Pop().(types.SickNum)
-			val2 := stack.Pop().(types.SickNum)
-			stack.Push(val1.AsInt() + val2.AsInt())
+			val1 := stack.Pop()
+			val2 := stack.Pop()
+
+			if val1.TypeName() != val2.TypeName() {
+				return fmt.Errorf("Can't invoke Add-Instruction with %v(%v) and %v(%v)", val1.ToHuman(), val1.TypeName(), val2.ToHuman(), val2.TypeName())
+			}
+
+			switch val1.(type) {
+			case types.SickString:
+				stack.Push(val2.(types.SickString).Value + val1.(types.SickString).Value)
+			case types.SickInt:
+				stack.Push(val1.(types.SickInt).Value + val2.(types.SickInt).Value)
+			}
 			continue
 		case instructions.INS_SUB:
 			val1 := stack.Pop().(types.SickNum)
@@ -147,8 +157,8 @@ func (interpreter Interpreter) Run() {
 		case instructions.INS_VOID:
 			continue
 		default:
-			fmt.Printf("Interpreter: No handling for instruction: %v\n", instruction.OpCode)
-			continue
+			return fmt.Errorf("Interpreter: No handling for instruction: %v", instruction.OpCode)
 		}
 	}
+	return nil
 }

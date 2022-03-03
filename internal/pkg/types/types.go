@@ -26,6 +26,7 @@ func AnyToSickType(any interface{}) SickType {
 
 type SickType interface {
 	ToHuman() string
+	TypeName() string
 }
 
 type SickNum interface {
@@ -37,12 +38,20 @@ type SickString struct {
 	Value string
 }
 
+func (SickString) TypeName() string {
+	return "sick::string"
+}
+
 func (sickString SickString) ToHuman() string {
 	return sickString.Value
 }
 
 type SickInt struct {
 	Value int
+}
+
+func (SickInt) TypeName() string {
+	return "sick::int"
 }
 
 func (sickInt SickInt) ToHuman() string {
@@ -59,6 +68,10 @@ func (sickInt SickInt) AsFloat() float64 {
 
 type SickBool struct {
 	Value bool
+}
+
+func (SickBool) TypeName() string {
+	return "sick::bool"
 }
 
 func (sickBool SickBool) ToHuman() string {

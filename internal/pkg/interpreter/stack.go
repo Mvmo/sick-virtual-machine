@@ -2,7 +2,7 @@ package interpreter
 
 import "mvmo.dev/sickvm/internal/pkg/types"
 
-type Stack []types.SickType
+type Stack []types.SickObject
 
 func (s *Stack) IsEmpty() bool {
 	return len(*s) == 0
@@ -10,11 +10,11 @@ func (s *Stack) IsEmpty() bool {
 
 // Push a new value onto the stack
 func (s *Stack) Push(element interface{}) {
-	*s = append(*s, types.AnyToSickType(element)) // Simply append the new value to the end of the stack
+	*s = append(*s, types.AnyToSickObject(element)) // Simply append the new value to the end of the stack
 }
 
 // Remove and return top element of stack. Return false if stack is empty.
-func (s *Stack) Pop() types.SickType {
+func (s *Stack) Pop() types.SickObject {
 	if s.IsEmpty() {
 		return nil
 	}
@@ -25,7 +25,7 @@ func (s *Stack) Pop() types.SickType {
 	return element
 }
 
-func (s *Stack) Peek() types.SickType {
+func (s *Stack) Peek() types.SickObject {
 	if s.IsEmpty() {
 		return nil
 	}

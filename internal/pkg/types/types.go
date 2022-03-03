@@ -7,9 +7,9 @@ import (
 	"syscall"
 )
 
-func AnyToSickType(any interface{}) SickType {
+func AnyToSickObject(any interface{}) SickObject {
 	switch any := any.(type) {
-	case SickType:
+	case SickObject:
 		return any
 	case string:
 		return SickString{any}
@@ -24,7 +24,7 @@ func AnyToSickType(any interface{}) SickType {
 	}
 }
 
-type SickType interface {
+type SickObject interface {
 	ToHuman() string
 	TypeName() string
 }

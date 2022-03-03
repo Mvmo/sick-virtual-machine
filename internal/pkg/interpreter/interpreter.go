@@ -42,7 +42,7 @@ func (interpreter Interpreter) Run() error {
 			val2 := stack.Pop()
 
 			if val1.TypeName() != val2.TypeName() {
-				return fmt.Errorf("Can't invoke Add-Instruction with %v(%v) and %v(%v)", val1.ToHuman(), val1.TypeName(), val2.ToHuman(), val2.TypeName())
+				return fmt.Errorf("can't invoke Add-Instruction with %v(%v) and %v(%v)", val1.ToHuman(), val1.TypeName(), val2.ToHuman(), val2.TypeName())
 			}
 
 			switch val1.(type) {
@@ -96,6 +96,14 @@ func (interpreter Interpreter) Run() error {
 			val1 := stack.Pop().(types.SickNum)
 			val2 := stack.Pop().(types.SickNum)
 			stack.Push(val2.AsFloat() >= val1.AsFloat())
+			continue
+		case instructions.INS_REQ:
+			requiredType := instruction.Params[0].(string)
+			typeOfStackHead := stack.Peek().TypeName()
+
+			if typeOfStackHead != requiredType {
+				return fmt.Errorf("required type %v and got %v", requiredType, typeOfStackHead)
+			}
 			continue
 		case instructions.INS_STORE:
 			identifier := instruction.Params[0].(string)

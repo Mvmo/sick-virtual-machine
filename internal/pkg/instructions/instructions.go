@@ -19,6 +19,7 @@ const (
 	INS_GT             // greater than
 	INS_LTE            // less than or equals
 	INS_GTE            // greater than or equals
+	INS_REQ            // require type -- program will exit if not satisfied
 	INS_STORE          // stores identifier associated with head of stack
 	INS_LOAD           // loads value from storage by identifier
 	INS_DEL            // deletes value from storage by identififer

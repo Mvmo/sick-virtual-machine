@@ -80,6 +80,8 @@ func (parser Parser) Parse(input string) ([]instructions.Instruction, *map[strin
 			opcode = instructions.INS_GT
 		case "gte":
 			opcode = instructions.INS_GTE
+		case "req":
+			opcode = instructions.INS_REQ
 		case "store":
 			opcode = instructions.INS_STORE
 		case "load":
@@ -176,6 +178,9 @@ func NewParser() *Parser {
 		instructions.INS_GT:  {},
 		instructions.INS_LTE: {},
 		instructions.INS_GTE: {},
+		instructions.INS_REQ: {
+			parseIdentifierParam,
+		},
 		instructions.INS_STORE: {
 			parseIdentifierParam,
 		},

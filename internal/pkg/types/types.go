@@ -4,6 +4,7 @@ import (
 	"log"
 	"reflect"
 	"strconv"
+	"strings"
 	"syscall"
 )
 
@@ -43,7 +44,7 @@ func (SickString) TypeName() string {
 }
 
 func (sickString SickString) ToHuman() string {
-	return sickString.Value
+	return strings.ReplaceAll(sickString.Value, "\\n", "\n") // this is super weird lol
 }
 
 type SickInt struct {

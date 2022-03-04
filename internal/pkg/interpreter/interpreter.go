@@ -22,6 +22,7 @@ func NewInterpreter(instructions []instructions.Instruction, Labels *map[string]
 
 func (interpreter Interpreter) Run() error {
 	var objectStack SickObjectStack
+	var referenceStack Stack
 	var storage map[string]types.SickObject = make(map[string]types.SickObject)
 
 	for i := 0; i < len(interpreter.Instructions); i++ {
@@ -147,8 +148,17 @@ func (interpreter Interpreter) Run() error {
 			head := objectStack.Pop()
 			fmt.Println(head.ToHuman())
 			continue
+		case instructions.INS_CALL:
+			labelName := instruction.Params[0].(string)
+			referenceStack.Push(i)
+			i = (*interpreter.Labels)[labelName] - 1
+			continue
 		case instructions.INS_GOTO:
 			labelName := instruction.Params[0].(string)
+			if labelName == "$" {
+				i = referenceStack.Pop().(int) - 1
+				continue
+			}
 			i = (*interpreter.Labels)[labelName] - 1
 			continue
 		case instructions.INS_DUMP:

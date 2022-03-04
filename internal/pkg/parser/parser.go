@@ -198,6 +198,9 @@ func NewParser() *Parser {
 			parseIntParam,
 		},
 		instructions.INS_DUP: {},
+		instructions.INS_CALL: {
+			parseIdentifierParam,
+		},
 		instructions.INS_GOTO: {
 			parseIdentifierParam,
 		},

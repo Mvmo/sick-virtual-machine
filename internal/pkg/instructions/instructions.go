@@ -29,6 +29,7 @@ const (
 	INS_PRINT          // prints head of stack
 	INS_PRINTLN        // prints head of stack with newline
 	INS_GOTO           // goto specified label
+	INS_CALL           // calls procedure - same as goto but pushes value to reference stack
 	INS_DUMP           // print whole stack
 	INS_VOID           // do nothing
 )

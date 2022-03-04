@@ -42,21 +42,46 @@ func (interpreter Interpreter) Run() error {
 			val1 := objectStack.Pop()
 			val2 := objectStack.Pop()
 
-			if val1.TypeName() != val2.TypeName() {
-				return fmt.Errorf("can't invoke Add-Instruction with %v(%v) and %v(%v)", val1.ToHuman(), val1.TypeName(), val2.ToHuman(), val2.TypeName())
-			}
-
 			switch val1.(type) {
 			case types.SickString:
-				objectStack.Push(val2.(types.SickString).Value + val1.(types.SickString).Value)
+				switch val2.(type) {
+				case types.SickString:
+					objectStack.Push(val2.(types.SickString).Value + val1.(types.SickString).Value)
+				case types.SickInt:
+					objectStack.Push(val2.(types.SickInt).ToHuman() + val1.(types.SickString).Value)
+				case types.SickBool:
+					objectStack.Push(val2.(types.SickBool).ToHuman() + val1.(types.SickString).Value)
+				default:
+					return fmt.Errorf("can't invoke Add-Instruction with %v(%v) and %v(%v)", val1.ToHuman(), val1.TypeName(), val2.ToHuman(), val2.TypeName())
+				}
 			case types.SickInt:
+				if val1.TypeName() != val2.TypeName() {
+					return fmt.Errorf("can't invoke Add-Instruction with %v(%v) and %v(%v)", val1.ToHuman(), val1.TypeName(), val2.ToHuman(), val2.TypeName())
+				}
 				objectStack.Push(val1.(types.SickInt).Value + val2.(types.SickInt).Value)
+			default:
+				return fmt.Errorf("can't invoke Add-Instruction with %vs", val1.TypeName())
 			}
+
 			continue
 		case instructions.INS_SUB:
-			val1 := objectStack.Pop().(types.SickNum)
-			val2 := objectStack.Pop().(types.SickNum)
-			objectStack.Push(val2.AsInt() - val1.AsInt())
+			val1 := objectStack.Pop()
+			val2 := objectStack.Pop()
+
+			switch val1 := val1.(type) {
+			case types.SickInt:
+				switch val2 := val2.(type) {
+				case types.SickString:
+					value := val2.Value
+					objectStack.Push(value[:len(value)-val1.Value])
+				case types.SickInt:
+					objectStack.Push(val2.AsInt() - val1.AsInt())
+				default:
+					return fmt.Errorf("can't invoke Sub-Instruction with [%v(%v) - %v(%v)]", val2.ToHuman(), val2.TypeName(), val1.ToHuman(), val1.TypeName())
+				}
+			default:
+				return fmt.Errorf("can't invoke Sub-Instruction with [%v(%v) - %v(%v)]", val2.ToHuman(), val2.TypeName(), val1.ToHuman(), val1.TypeName())
+			}
 			continue
 		case instructions.INS_MUL:
 			val1 := objectStack.Pop().(types.SickNum)

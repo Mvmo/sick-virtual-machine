@@ -26,6 +26,7 @@ const (
 	INS_JMP            // jumps to instruction by instruction count
 	INS_CJMP           // conditional jump
 	INS_DUP            // duplicates head
+	INS_SWAP           // swaps head and head - 1
 	INS_PRINT          // prints head of stack
 	INS_PRINTLN        // prints head of stack with newline
 	INS_GOTO           // goto specified label

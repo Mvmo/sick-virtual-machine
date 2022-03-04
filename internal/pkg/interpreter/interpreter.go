@@ -136,6 +136,11 @@ func (interpreter Interpreter) Run() error {
 
 			i = whereToJump
 			continue
+		case instructions.INS_SWAP:
+			a := objectStack.Pop()
+			b := objectStack.Pop()
+			objectStack.Push(b)
+			objectStack.Push(a)
 		case instructions.INS_DUP:
 			head := objectStack.Pop()
 			objectStack.Push(head)

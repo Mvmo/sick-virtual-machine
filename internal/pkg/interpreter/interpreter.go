@@ -155,6 +155,9 @@ func (interpreter Interpreter) Run() error {
 			objectStack.Push(head)
 			objectStack.Push(head)
 			continue
+		case instructions.INS_DROP:
+			objectStack.Pop()
+			continue
 		case instructions.INS_PRINT:
 			head := objectStack.Pop()
 			fmt.Print(head.ToHuman())

@@ -100,6 +100,8 @@ func (parser Parser) Parse(input string) ([]instructions.Instruction, *map[strin
 			opcode = instructions.INS_SWAP
 		case "dup":
 			opcode = instructions.INS_DUP
+		case "drop":
+			opcode = instructions.INS_DROP
 		case "print":
 			opcode = instructions.INS_PRINT
 		case "println":
@@ -205,6 +207,7 @@ func NewParser() *Parser {
 		instructions.INS_SIZEOF: {},
 		instructions.INS_SWAP:   {},
 		instructions.INS_DUP:    {},
+		instructions.INS_DROP:   {},
 		instructions.INS_CALL: {
 			parseIdentifierParam,
 		},

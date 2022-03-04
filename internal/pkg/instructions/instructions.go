@@ -28,6 +28,7 @@ const (
 	INS_SIZEOF         // pops value and pushes it's value size onto stack
 	INS_DUP            // duplicates head
 	INS_SWAP           // swaps head and head - 1
+	INS_DROP           // drops head
 	INS_PRINT          // prints head of stack
 	INS_PRINTLN        // prints head of stack with newline
 	INS_GOTO           // goto specified label

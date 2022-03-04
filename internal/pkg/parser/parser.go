@@ -102,6 +102,8 @@ func (parser Parser) Parse(input string) ([]instructions.Instruction, *map[strin
 			opcode = instructions.INS_PRINTLN
 		case "goto":
 			opcode = instructions.INS_GOTO
+		case "call":
+			opcode = instructions.INS_CALL
 		default:
 			fmt.Printf("Parser: No instruction parsing for %v\n", opname)
 			syscall.Exit(-1)

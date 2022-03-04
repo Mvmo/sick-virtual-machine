@@ -194,7 +194,6 @@ func (interpreter Interpreter) Run() error {
 		case instructions.INS_CALL:
 			labelName := instruction.Params[0].(string)
 			referenceStack.Push(i + 1)
-			fmt.Printf("Push Ref: %v\n", i)
 			i = (*interpreter.Labels)[labelName] - 1
 			continue
 		case instructions.INS_GOTO:

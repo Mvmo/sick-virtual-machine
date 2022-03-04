@@ -105,6 +105,7 @@ func (interpreter Interpreter) Run() error {
 			if typeOfSickObjectStackHead != requiredType {
 				return fmt.Errorf("required type %v and got %v", requiredType, typeOfSickObjectStackHead)
 			}
+
 			continue
 		case instructions.INS_STORE:
 			identifier := instruction.Params[0].(string)
@@ -150,7 +151,8 @@ func (interpreter Interpreter) Run() error {
 			continue
 		case instructions.INS_CALL:
 			labelName := instruction.Params[0].(string)
-			referenceStack.Push(i)
+			referenceStack.Push(i + 1)
+			fmt.Printf("Push Ref: %v\n", i)
 			i = (*interpreter.Labels)[labelName] - 1
 			continue
 		case instructions.INS_GOTO:

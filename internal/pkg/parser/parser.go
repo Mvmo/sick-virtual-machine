@@ -108,7 +108,6 @@ func (parser Parser) Parse(input string) ([]instructions.Instruction, *map[strin
 			fmt.Printf("Parser: No instruction parsing for %v\n", opname)
 			syscall.Exit(-1)
 		}
-
 		parseFunctions := parser.paramsParseFunctionsMap[opcode]
 
 		var params []string = make([]string, 0)

@@ -25,6 +25,7 @@ const (
 	INS_DEL            // deletes value from storage by identififer
 	INS_JMP            // jumps to instruction by instruction count
 	INS_CJMP           // conditional jump
+	INS_SIZEOF         // pops value and pushes it's value size onto stack
 	INS_DUP            // duplicates head
 	INS_SWAP           // swaps head and head - 1
 	INS_PRINT          // prints head of stack

@@ -94,6 +94,8 @@ func (parser Parser) Parse(input string) ([]instructions.Instruction, *map[strin
 			opcode = instructions.INS_JMP
 		case "cjmp":
 			opcode = instructions.INS_CJMP
+		case "sizeof":
+			opcode = instructions.INS_SIZEOF
 		case "swap":
 			opcode = instructions.INS_SWAP
 		case "dup":
@@ -200,8 +202,9 @@ func NewParser() *Parser {
 			parseIntParam,
 			parseIntParam,
 		},
-		instructions.INS_SWAP: {},
-		instructions.INS_DUP:  {},
+		instructions.INS_SIZEOF: {},
+		instructions.INS_SWAP:   {},
+		instructions.INS_DUP:    {},
 		instructions.INS_CALL: {
 			parseIdentifierParam,
 		},

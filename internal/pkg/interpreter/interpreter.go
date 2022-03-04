@@ -136,6 +136,15 @@ func (interpreter Interpreter) Run() error {
 
 			i = whereToJump
 			continue
+		case instructions.INS_SIZEOF:
+			head := objectStack.Pop()
+			switch head := head.(type) {
+			case types.SickString:
+				objectStack.Push(len(head.Value))
+			default:
+				return fmt.Errorf("can't use sizeof on %v", head.TypeName())
+			}
+			continue
 		case instructions.INS_SWAP:
 			a := objectStack.Pop()
 			b := objectStack.Pop()

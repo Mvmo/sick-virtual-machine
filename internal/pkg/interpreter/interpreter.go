@@ -38,9 +38,6 @@ func (interpreter Interpreter) Run() error {
 		case instructions.INS_BPUSH:
 			objectStack.Push(types.AnyToSickObject(instruction.Params[0]))
 			continue
-		case instructions.INS_APUSH:
-			objectStack.Push(types.AnyToSickObject(instruction.Params[0]))
-			continue
 		case instructions.INS_ADD:
 			a := objectStack.Pop()
 			b := objectStack.Pop()

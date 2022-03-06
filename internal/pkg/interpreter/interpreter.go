@@ -38,29 +38,22 @@ func (interpreter Interpreter) Run() error {
 		case instructions.INS_BPUSH:
 			objectStack.Push(types.AnyToSickObject(instruction.Params[0]))
 			continue
+		case instructions.INS_APUSH:
+			objectStack.Push(types.AnyToSickObject(instruction.Params[0]))
+			continue
 		case instructions.INS_ADD:
-			val1 := objectStack.Pop()
-			val2 := objectStack.Pop()
+			a := objectStack.Pop()
+			b := objectStack.Pop()
 
-			switch val1.(type) {
-			case types.SickString:
-				switch val2.(type) {
-				case types.SickString:
-					objectStack.Push(val2.(types.SickString).Value + val1.(types.SickString).Value)
-				case types.SickInt:
-					objectStack.Push(val2.(types.SickInt).ToHuman() + val1.(types.SickString).Value)
-				case types.SickBool:
-					objectStack.Push(val2.(types.SickBool).ToHuman() + val1.(types.SickString).Value)
-				default:
-					return fmt.Errorf("can't invoke Add-Instruction with %v(%v) and %v(%v)", val1.ToHuman(), val1.TypeName(), val2.ToHuman(), val2.TypeName())
+			switch a := a.(type) {
+			case types.Addable:
+				result, err := a.Add(b)
+				if err != nil {
+					return err
 				}
-			case types.SickInt:
-				if val1.TypeName() != val2.TypeName() {
-					return fmt.Errorf("can't invoke Add-Instruction with %v(%v) and %v(%v)", val1.ToHuman(), val1.TypeName(), val2.ToHuman(), val2.TypeName())
-				}
-				objectStack.Push(val1.(types.SickInt).Value + val2.(types.SickInt).Value)
+				objectStack.Push(result)
 			default:
-				return fmt.Errorf("can't invoke Add-Instruction with %vs", val1.TypeName())
+				return fmt.Errorf("+ doesnt not work -- better error message")
 			}
 
 			continue
